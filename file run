@@ -1,0 +1,378 @@
+#include <stdio.h>
+#include<string.h> 
+#include <stdlib.h>
+
+
+
+typedef struct {
+    int number;
+    char ngay[11]; 
+    char bienso[11];
+    int loaixe;      
+    int giatien;
+    char nhanvien[4]; 
+} Thongtin;
+
+int cnt = 1; 
+Thongtin thongtin[10000];
+
+
+void inputInfo(Thongtin *thongtin, int t) {
+	if(t==0)thongtin->number = cnt; 
+
+    printf("Nhap bien so xe: ");
+    scanf("%19s", thongtin->bienso);
+
+    printf("Nhap loai xe (1: xe may, 2: o to, 3: xe khac): ");
+    scanf("%d", &thongtin->loaixe);
+
+    printf("Nhap nhan vien: ");
+    scanf("%3s", thongtin->nhanvien);
+
+    // Xác dinh giá tien theo loai xe
+    switch(thongtin->loaixe){
+        case 1:
+            thongtin->giatien = 30000;
+            break;
+        case 2:
+            thongtin->giatien = 100000;
+            break;
+        case 3:
+            thongtin->giatien = 150000;
+            break;
+        default:
+            thongtin->giatien = 0; 
+    }
+
+    if(t==0) cnt++;
+}
+
+void printInfo(Thongtin thongtin) {
+	
+    printf("| %3d | %8s| %7d | %15s | %10d | %9s |\n",
+           thongtin.number, thongtin.ngay, thongtin.loaixe, thongtin.bienso,
+           thongtin.giatien, thongtin.nhanvien);
+}
+
+void input() {
+	system("cls"); 
+    char date[11];
+    printf("***Nhap du lieu***\n" );
+    printf("Nhap ngay thang nam (dd/mm/yyyy): ");
+    scanf("%10s", date);
+
+    printf("Nhap tong so xe: ");
+    int n;
+    scanf("%d", &n);
+    printf("\n"); 
+
+    printf("Nhap thong tin xe:\n");
+	int i;
+    for ( i = 1; i <= n; i++) {
+    	printf("Xe thu : %d \n", i);
+        strcpy(thongtin[cnt].ngay, date);
+        inputInfo(&thongtin[cnt],0);
+        printf("\n");
+    }
+    printf("\nDanh sach thong tin xe:\n");
+    printf("________________________________________________________________________\n");
+    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+    printf("|_____|___________|_________|_________________|____________|___________|\n");
+	
+    for ( i = 0; i < n; i++) {
+        printInfo(thongtin[cnt-n+i]);
+    }
+    printf("|_____|___________|_________|_________________|____________|___________|\n"); 
+	printf("Du lieu da duoc luu tru nhan 0 de thoat ");
+	int a;
+	scanf("%d,&a"); 
+}
+
+
+void erase(Thongtin *thongtin) {
+	system("cls"); 
+	printf("\nDanh sach thong tin xe:\n");
+    printf("________________________________________________________________________\n");
+    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+    printf("|_____|___________|_________|_________________|____________|___________|\n");
+	int i;
+    for ( i = 1; i < cnt; i++) {
+    	
+        printInfo(thongtin[i]);
+    }
+    printf("|_____|___________|_________|_________________|____________|___________|\n\n");   
+	
+    int choice;
+    printf("1. Xoa theo so thu tu\n");
+    printf("2. Xoa theo bien so\n");
+    printf("Chon cach xoa: ");
+    scanf("%d", &choice);
+
+    if (choice == 1) {
+    	
+        int stt;
+        printf("Nhap so thu tu xe can xoa: ");
+        scanf("%d", &stt);
+
+        if (stt >= 1 && stt <= cnt) {
+            for (i = stt; i < cnt - 1; i++) {
+                thongtin[i] = thongtin[i + 1];
+                thongtin[i].number--;
+            }
+            cnt--;
+            printf("Da xoa thong tin xe co so thu tu %d\n", stt);
+        } else {
+            printf("So thu tu khong hop le\n");
+        }
+        printf("Thuc hien xong thao tac vui long nhan 0 de thoat ");
+		int a;
+		scanf("%d,&a"); 
+    } else if (choice == 2) {
+    	 
+        char bienso[11];
+        printf("Nhap bien so xe can xoa: ");
+        scanf("%10s", bienso);
+
+        int j, found = 0;
+        for (i = 0; i < cnt; i++) {
+            if (strcmp(thongtin[i].bienso, bienso) == 0) {
+                for (j = i; j < cnt - 1; j++) {
+                    thongtin[j] = thongtin[j + 1];
+                    thongtin[j].number--;
+                }
+                cnt--;
+                printf("Da xoa thong tin xe co bien so %s\n", bienso);
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found) {
+            printf("Khong tim thay xe co bien so %s\n", bienso);
+        }
+        printf("Thuc hien xong thao tac vui long nhan 0 de thoat ");
+		int a;
+		scanf("%d,&a");
+    } else {
+        printf("Lua chon khong hop le!\n");
+    }
+}
+
+
+void sua1(){
+	system("cls"); 
+	int stt;
+    printf("Nhap STT cua xe can sua: ");
+    scanf("%d", &stt);
+
+    if (stt < 1 || stt > cnt) {
+        printf("STT khong hop le.\n");
+        return;
+    }
+
+    printf("Thong tin hien tai:\n");
+    printf("\nDanh sach thong tin xe:\n");
+    printf("________________________________________________________________________\n");
+    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+    printf("|_____|___________|_________|_________________|____________|___________|\n");
+    printInfo(thongtin[stt]);
+    printf("|_____|___________|_________|_________________|____________|___________|\n\n");
+
+    printf("Nhap thong tin moi:\n");
+    inputInfo(&thongtin[stt],1);
+    printf("Da sua thong tin thanh cong.\n");
+}
+
+void edit(){
+	system("cls"); 
+	int choi;
+	do{ 
+	    
+	    printf("Thong tin hien tai:\n");
+        printf("\nDanh sach thong tin xe:\n");
+        printf("________________________________________________________________________\n");
+        printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+        printf("|_____|___________|_________|_________________|____________|___________|\n");
+        printInfo(thongtin[cnt]);
+        printf("|_____|___________|_________|_________________|____________|___________|\n\n");
+	    
+        printf("Chon cac tinh nang sau\n");
+        printf("1. Chinh sua theo STT\n");
+        printf("0. Exit\n");
+        printf("\n");
+        scanf("%d", &choi);
+
+        switch (choi){ 
+		    case 0:
+				printf("Ko Sua ha ???\n\n");
+				break;
+            case 1:
+                sua1();
+                break;                 
+            default:
+                printf("\nChon Qua OC TRO ko hieu\n");
+                continue;               
+        }
+	}while(choi != 0); 
+}
+
+
+void display(){
+	system("cls"); 
+	int choice;
+    do{
+        printf("1. Xuat tat ca\n");
+        printf("2. Xoat theo ngay\n");
+        printf("3. Xuat theo nhan vien\n");
+        printf("0. Exit\n");
+        printf("\n");
+        scanf("%d", &choice);
+
+        int i; 
+        long long sum=0; 
+        switch (choice){ 
+		    case 0:
+				printf("tai sao lai thoat ???\n");
+				break;
+            case 1:
+            	system("cls"); 
+			    printf("\nDanh sach thong tin xe:\n");
+			    printf("________________________________________________________________________\n");
+			    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+			           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+			    printf("|_____|___________|_________|_________________|____________|___________|\n");
+			    sum = 0; 
+			    for ( i = 1; i < cnt; i++) {
+			    	
+			        printInfo(thongtin[i]);
+					sum += (long long)thongtin[i].giatien;
+			    }
+			    printf("|_____|___________|_________|_________________|____________|___________|\n");  
+			    
+		    	printf("|_____|___________|_________|_________________|____________|___________|\n");  
+				printf("|     |           |         |  TONG TIEN      |   %7lld  |           |\n", sum);
+				printf("|_____|___________|_________|_________________|____________|___________|\n");
+				 
+                break; 
+            case 2:
+            	system("cls"); 
+            	
+			    printf("nhap ngay: ");
+				char s[11];
+				scanf("%10s", s); 
+			    printf("\nDanh sach thong tin xe:\n");
+			    printf("________________________________________________________________________\n");
+			    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+			           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+			    printf("|_____|___________|_________|_________________|____________|___________|\n");
+			    sum = 0; 
+			    for ( i = 1; i < cnt; i++) {
+			    	
+					if (strcmp(thongtin[i].ngay, s) == 0){
+					
+			        printInfo(thongtin[i]);
+			        
+			        sum += (long long)thongtin[i].giatien;}
+			    }
+			   
+                 
+				
+		    	printf("|_____|___________|_________|_________________|____________|___________|\n");  
+				printf("|     |           |         |  TONG TIEN      |   %7lld  |           |\n", sum);
+				printf("|_____|___________|_________|_________________|____________|___________|\n");
+				  
+                break; 
+            case 3:
+            	system("cls"); 
+            	printf("nhap ma nv: ");
+				char s1[4];
+				scanf("%3s", s1);
+			    printf("\nDanh sach thong tin xe:\n");
+			    printf("________________________________________________________________________\n");
+			    printf("| %3s | %9s | %7s | %15s | %10s | %9s |\n",
+			           "STT", "Ngay", "Loai xe", "Bien so xe", "Gia tien", "Nhan vien");
+			    printf("|_____|___________|_________|_________________|____________|___________|\n");
+			    sum = 0; 
+			    for ( i = 1; i < cnt; i++) {
+			    	if (strcmp(thongtin[i].nhanvien, s1) == 0){
+					
+			        printInfo(thongtin[i]
+					);
+					sum += (long long)thongtin[i].giatien;};
+			    }
+			    
+                 
+				
+		    	printf("|_____|___________|_________|_________________|____________|___________|\n");  
+				printf("|     |           |         |  TONG TIEN      |   %7lld  |           |\n", sum);
+				printf("|_____|___________|_________|_________________|____________|___________|\n");
+				
+                break; 
+			                
+            default:
+                printf("\nChon Qua OC TRO ko hieu\n");
+                break;               
+        }
+	}while(choice != 0);
+}
+
+
+
+int main() {
+    int choice;
+    char date[11];
+    
+    do{ system("cls");
+    	 
+        
+        printf("*******************HE THONG LUU TRU RUA XE******************\n");
+		printf("*	1. Nhap du lieu xe theo ngay.                      *\n");
+		printf("*	2. Xoa                                             *\n");
+		printf("*	3. Chinh sua                                       *\n");
+		printf("*	4. Hien thi bang he thong                          *\n");
+		printf("*	5. Them 1 du lieu                                  *\n");
+		printf("*	0. Exit                                            *\n");
+		printf("************************************************************\n");
+
+        printf("\n");
+        scanf("%d", &choice);
+
+        switch (choice){ 
+		    case 0:
+				printf("tai sao lai thoat ???");
+				break;
+            case 1:
+                input();
+                break; 
+            case 2:
+                erase(thongtin);
+                break; 
+            case 3:
+                edit();
+                break; 
+            case 4:
+                display();
+                break; 
+            case 5:
+            	system("cls");
+			    printf("Nhap ngay thang nam (dd/mm/yyyy): ");
+			    scanf("%10s", date);
+			    strcpy(thongtin[cnt].ngay, date);
+                inputInfo(&thongtin[cnt],0);
+                printf("Da hoan thanh vui long nhan 0 de thoat ");
+				int a;
+				scanf("%d,&a"); 
+                break;
+			                
+            default:
+                printf("\nChon Qua OC TRO ko hieu\n");
+                break;               
+        }
+	}while(choice != 0);
+
+    return 0;
+}
